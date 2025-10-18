@@ -22,6 +22,7 @@
     body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:var(--dark);-webkit-font-smoothing:antialiased}
     .container{max-width:1100px;margin:36px auto;padding:20px}
     header{display:flex;align-items:center;gap:18px}
+    .logo{display:flex;align-items:center;gap:12px}
     .logo svg{width:48px;height:48px}
     h1{font-size:28px;margin:0}
     p.lead{margin:8px 0 0;color:var(--muted)}
@@ -35,17 +36,25 @@
     .result.good{border-left:6px solid var(--success)}
     .result.bad{border-left:6px solid var(--danger)}
     .small{font-size:13px;color:var(--muted)}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+    .feature{background:#fbfdff;padding:12px;border-radius:10px;border:1px solid #eef6ff}
     .pricing{display:flex;gap:12px;margin-top:18px}
     .plan{flex:1;padding:16px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfbff);border:1px solid #eef2ff}
     footer{text-align:center;color:var(--muted);margin-top:26px;padding:18px 0}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.logo svg{width:42px;height:42px}.container{padding:12px}}
+    .tag{display:inline-block;background:#eef6ff;color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px}
+    .api-snippet{background:#0b1220;color:#fff;padding:12px;border-radius:10px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:13px}
+    .contact-row{display:flex;gap:12px;align-items:center}
+    .contact-row a{color:var(--accent);text-decoration:none;font-weight:600}
+    .foot-note{font-size:13px;color:var(--muted);margin-top:10px}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <div class="logo">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Keep the same SVG logo you liked -->
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <rect x="2" y="8" width="60" height="48" rx="8" fill="#fff" stroke="#e6f0ff"/>
           <path d="M6 16l26 18L58 16" stroke="#cfe8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           <rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
@@ -61,11 +70,46 @@
     <div class="grid">
       <div>
         <div class="card">
-          <h2>Stop fake signups — instantly</h2>
-          <p class="small">Truemailer checks public disposable lists, MX records, and suspicious patterns to decide if an email is usable.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="tag">Real-time API</div>
+              <h2 style="margin:12px 0 4px">Stop fake signups — instantly</h2>
+              <p class="small">Truemailer checks public disposable lists, MX records and suspicious patterns to decide if an email is usable.</p>
+            </div>
+            <div style="text-align:right" class="small">
+              <div style="font-weight:700">Free demo</div>
+              <div>250 checks / month</div>
+            </div>
+          </div>
+
+          <div class="features">
+            <div class="feature">
+              <strong>Updated lists</strong>
+              <div class="small">Public blocklists merged daily</div>
+            </div>
+            <div class="feature">
+              <strong>Allowlist support</strong>
+              <div class="small">Whitelist trusted providers or domains</div>
+            </div>
+            <div class="feature">
+              <strong>MX checks</strong>
+              <div class="small">Domains without mail servers marked suspicious</div>
+            </div>
+            <div class="feature">
+              <strong>Low-latency</strong>
+              <div class="small">Cloudflare + Render edge mirror</div>
+            </div>
+          </div>
+
+          <h3 style="margin-top:16px">How devs integrate</h3>
+          <div class="api-snippet" id="api-snippet">
+POST https://truemailer-api.onrender.com/verify
+Body: {"email":"user@example.com"}
+          </div>
+          <div class="foot-note">Use header <code>x-api-key</code> if you provide a private client key.</div>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-top:18px">
           <h3>Pricing</h3>
           <div class="pricing">
             <div class="plan">
@@ -86,32 +130,64 @@
           </div>
         </div>
 
-        <div class="card">
-          <h3>Contact</h3>
-          <p class="small">support@truemailer.in</p>
+        <div class="card" style="margin-top:18px">
+          <h3>Why Truemailer?</h3>
+          <ul class="small">
+            <li>Reduce fake signups and trial abuse</li>
+            <li>Decrease spam, improve analytics & ad spend</li>
+            <li>Small & fast — built for startups</li>
+          </ul>
+          <div style="margin-top:12px" class="contact-row">
+            <div>
+              <strong>Contact</strong>
+              <div class="small">support@truemailer.in</div>
+            </div>
+            <div style="margin-left:auto">
+              <a href="mailto:support@truemailer.in">Email us</a>
+            </div>
+          </div>
         </div>
       </div>
 
+      <!-- Demo panel -->
       <aside>
         <div class="card">
           <h3 class="demo-title">Try it now</h3>
-          <div class="input-row">
-            <input id="demo-email" type="text" placeholder="name@example.com" />
-            <button id="check-btn" class="primary">Verify</button>
+          <p class="small">Enter any email to test. Demo key is prefilled.</p>
+
+          <div style="margin-top:12px">
+            <div class="input-row">
+              <input id="demo-email" type="text" placeholder="name@example.com" />
+              <button id="check-btn" class="primary">Verify</button>
+            </div>
+
+            <div style="margin-top:8px" class="small">
+              <label>Demo usage</label>
+              <div style="margin-top:6px" class="api-snippet">Demo key: <strong>demo_key_123</strong></div>
+            </div>
+
+            <div id="result" class="result" style="display:none"></div>
+            <div id="loader" class="small" style="display:none;margin-top:8px">⏳ Checking…</div>
           </div>
-          <div id="result" class="result" style="display:none"></div>
-          <div id="loader" class="small" style="display:none;margin-top:8px">⏳ Checking…</div>
+
+          <hr style="margin:14px 0;border:none;border-top:1px solid #eef6ff"/>
+
+          <div class="small" style="color:var(--muted)">
+            <strong>Integration</strong>
+            <div>Use the Render API endpoint (recommended) or your Cloudflare Worker mirror.</div>
+          </div>
         </div>
       </aside>
     </div>
 
     <footer>
-      © <strong>Truemailer</strong> — Built with ❤️ | Some false positives/negatives may occur.
+      <div>© <strong>Truemailer</strong> — Built with ❤️</div>
+      <div class="foot-note">We block publicly available disposable domains. Some false positives/negatives are possible — contact us to whitelist or report a domain.</div>
     </footer>
   </div>
 
   <script>
-    const WORKER_URL = "https://truemailer-api.onrender.com/";
+    const WORKER_URL = "https://truemailer-api.onrender.com/verify";
 
     const btn = document.getElementById("check-btn");
     const emailInput = document.getElementById("demo-email");
@@ -137,7 +213,7 @@
         const res = await fetch(WORKER_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ email, api_key: "demo_key_123" })
         });
         const data = await res.json();
         let parsed = { valid: true, is_disposable: false, reason: "Valid", email };
