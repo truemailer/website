@@ -1,163 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Truemailer — Public Disposable Email Blocker</title>
-  <meta name="description" content="Truemailer verifies emails in real-time to block publicly available disposable or temporary addresses." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Verification Access</title>
   <style>
-    :root {
-      --bg:#f7fbff;
-      --card:#fff;
-      --accent:#007aff;
-      --muted:#6b7280;
-      --dark:#0b1530;
-      --radius:12px;
-      --success:#16a34a;
-      --danger:#ef4444;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+      text-align: center;
+      padding: 30px;
     }
-    * {box-sizing:border-box}
-    body {margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:var(--dark);}
-    .container {max-width:1100px;margin:36px auto;padding:20px}
-    header {display:flex;align-items:center;gap:12px;margin-bottom:20px}
-    h1 {margin:0;font-size:28px}
-    p.lead {color:var(--muted);margin:4px 0 0}
-    .card {background:var(--card);border-radius:var(--radius);box-shadow:0 6px 18px rgba(0,0,0,0.05);padding:20px;margin-top:16px}
-    .tag {display:inline-block;background:#eef6ff;color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px}
-    .small {font-size:13px;color:var(--muted)}
-    input, button {font-size:15px;border-radius:10px;padding:12px;border:1px solid #e6edf6}
-    button {background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:600}
-    .result {margin-top:12px;padding:12px;border-radius:10px;background:#f0f6ff}
-    .result.good {border-left:6px solid var(--success)}
-    .result.bad {border-left:6px solid var(--danger)}
-    .pricing {display:flex;gap:12px;flex-wrap:wrap}
-    .plan {flex:1;min-width:220px;padding:16px;border-radius:12px;border:1px solid #eef2ff;background:linear-gradient(180deg,#fff,#fbfbff)}
-    footer {text-align:center;color:var(--muted);margin-top:30px;font-size:13px}
-    @media(max-width:900px){.pricing{flex-direction:column}}
-    .upi-box {background:#fbfdff;padding:14px;border:1px solid #eef6ff;border-radius:10px;margin-top:12px}
-    .input-row {display:flex;gap:8px;margin-top:8px}
+    h1 { color: #111; margin-bottom: 10px; }
+    .container {
+      max-width: 480px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .price-box { margin: 20px 0; }
+    .plan {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 10px 0;
+    }
+    .plan h3 { margin: 5px 0; }
+    .price { font-size: 22px; font-weight: bold; color: #007bff; margin: 5px 0; }
+    button {
+      background: #007bff; color: white;
+      border: none; padding: 12px 20px;
+      border-radius: 8px; cursor: pointer;
+      font-size: 15px; margin-top: 10px;
+    }
+    button:hover { background: #0056b3; }
+    input {
+      width: 100%; padding: 10px;
+      margin-top: 10px; border: 1px solid #ccc;
+      border-radius: 8px; font-size: 15px;
+    }
+    .note {
+      margin-top: 20px; font-size: 13px; color: gray;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="8" width="60" height="48" rx="8" fill="#fff" stroke="#e6f0ff"/>
-        <path d="M6 16l26 18L58 16" stroke="#cfe8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
-        <text x="32" y="42" fill="#fff" font-size="14" font-weight="700" text-anchor="middle" font-family="Inter, sans-serif">T</text>
-      </svg>
-      <div>
-        <h1>Truemailer</h1>
-        <p class="lead">Responsible, reliable — blocks publicly known disposable emails.</p>
-      </div>
-    </header>
+    <h1>Email Verification Access</h1>
+    <p>Access our verified disposable email checker securely.</p>
 
-    <div class="card">
-      <div class="tag">Responsible Email Filtering</div>
-      <p>Truemailer uses public lists and MX validation to detect and block disposable or invalid email addresses in real time.</p>
+    <div class="price-box">
+      <h3>Available Plans</h3>
+      <div class="plan">
+        <h3>🪶 Basic Plan</h3>
+        <p>₹199 / one-time</p>
+        <p>Includes <b>1,000 checks</b></p>
+      </div>
+      <div class="plan">
+        <h3>⚡ Pro Plan</h3>
+        <p>₹499 / one-time</p>
+        <p>Includes <b>5,000 checks</b></p>
+      </div>
+      <div class="plan">
+        <h3>🚀 Ultimate Plan</h3>
+        <p>₹999 / one-time</p>
+        <p>Includes <b>15,000 checks</b></p>
+      </div>
+
+      <p class="price">Pay via UPI:<br><b>ashishnaikbackup@okhdfcbank</b></p>
     </div>
 
-    <div class="card">
-      <h3>Free Demo</h3>
-      <p class="small">Try it below. Demo key allows limited monthly checks.</p>
-      <div class="input-row">
-        <input id="demo-email" type="text" placeholder="name@example.com">
-        <button id="check-btn">Verify</button>
-      </div>
-      <div id="loader" class="small" style="display:none;margin-top:6px">⏳ Checking…</div>
-      <div id="result" class="result" style="display:none"></div>
-    </div>
+    <p>📩 After payment, email your <b>payment screenshot or UPI ID</b> to:</p>
+    <p><b>ashishnaikbackup@gmail.com</b></p>
+    <p>We’ll verify and send your API key + final invoice manually.</p>
 
-    <div class="card">
-      <h3>Plans</h3>
-      <div class="pricing">
-        <div class="plan">
-          <strong>Free</strong>
-          <div class="small">250 checks / month</div>
-          <div style="margin-top:8px;font-weight:700">₹0</div>
-        </div>
-        <div class="plan">
-          <strong>Starter</strong>
-          <div class="small">10,000 checks / month</div>
-          <div style="margin-top:8px;font-weight:700">₹199 / month</div>
-        </div>
-        <div class="plan">
-          <strong>Pro</strong>
-          <div class="small">50,000 checks / month</div>
-          <div style="margin-top:8px;font-weight:700">₹499 / month</div>
-        </div>
-      </div>
-      <p class="small" style="margin-top:10px">All plans include access to the same public disposable domain detection service.</p>
-    </div>
+    <h3 style="margin-top:25px;">Enter your Email (for record)</h3>
+    <input type="email" id="email" placeholder="example@email.com" required>
+    <button onclick="generateInvoice()">Download Invoice</button>
 
-    <div class="card">
-      <h3>Payment & Access</h3>
-      <p>We currently accept only UPI payments. Once payment is made, upload proof and receive your unique API key automatically via email within a few minutes.</p>
-      <div class="upi-box">
-        <strong>UPI ID:</strong> <span style="color:var(--accent)">ashishnaikbackup@okhdfcbank</span><br>
-        <strong>Pay Link:</strong>
-        <a href="upi://pay?pa=ashishnaikbackup@okhdfcbank&pn=Truemailer&cu=INR" style="color:var(--accent)">Open UPI App</a>
-      </div>
-
-      <div style="margin-top:14px">
-        <label class="small">Upload Payment Screenshot:</label><br>
-        <input type="file" id="payment-proof" accept="image/*"><br><br>
-        <label class="small">Your Email:</label><br>
-        <input type="email" id="user-email" placeholder="you@example.com" style="width:100%"><br><br>
-        <button id="upload-btn">Submit & Generate Key</button>
-      </div>
-      <div id="upload-status" class="small" style="margin-top:8px"></div>
-    </div>
-
-    <footer>
-      <div>© Truemailer — Built responsibly, blocking only public disposable domains.</div>
-    </footer>
+    <p class="note">
+      *Ensure correct email before clicking “Download.”<br>
+      *Don’t click without completing payment.<br>
+      *Send payment proof via email to receive your key.
+    </p>
   </div>
 
   <script>
-    const WORKER_URL = "https://truemailer-api.onrender.com/verify";
-    const btn = document.getElementById("check-btn");
-    const emailInput = document.getElementById("demo-email");
-    const resultDiv = document.getElementById("result");
-    const loader = document.getElementById("loader");
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
 
-    btn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      if(!email){ resultDiv.style.display="block"; resultDiv.className="result bad"; resultDiv.innerText="Please enter an email."; return; }
-      loader.style.display="block";
-      resultDiv.style.display="none";
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({ email, api_key: "demo_key_123" })
-        });
-        const data = await res.json();
-        const allowed = !(data.is_disposable || data.valid === false);
-        resultDiv.style.display="block";
-        resultDiv.className = "result " + (allowed ? "good" : "bad");
-        resultDiv.innerHTML = allowed ? `<strong style="color:var(--success)">Allowed:</strong> ${email}` : `<strong style="color:var(--danger)">Blocked:</strong> ${email}`;
-      } catch {
-        resultDiv.style.display="block";
-        resultDiv.className="result bad";
-        resultDiv.innerText="Network error, try again later.";
-      } finally {
-        loader.style.display="none";
+    function generateInvoice() {
+      const email = document.getElementById('email').value.trim();
+
+      if (!email) {
+        alert('❗ Please enter your email before downloading the invoice.');
+        return;
       }
-    });
 
-    // Upload handler (dummy)
-    document.getElementById("upload-btn").addEventListener("click", () => {
-      const email = document.getElementById("user-email").value.trim();
-      const file = document.getElementById("payment-proof").files[0];
-      const status = document.getElementById("upload-status");
-      if(!email || !file){ status.innerText="Please attach proof and enter email."; status.style.color="var(--danger)"; return; }
-      status.innerText="Processing payment and generating key... (automated system)";
-      status.style.color="var(--muted)";
-      setTimeout(()=>{status.innerHTML=`✅ Key generated and sent to ${email}`;status.style.color="var(--success)";},3000);
-    });
+      if (!validateEmail(email)) {
+        alert('⚠️ Please enter a valid email address.');
+        return;
+      }
+
+      const confirmProceed = confirm(
+        'Have you made the UPI payment to ashishnaikbackup@okhdfcbank?\n\nClick OK to continue and download invoice.'
+      );
+
+      if (!confirmProceed) return;
+
+      const invoiceText = `
+-----------------------------
+Email Verification Access
+-----------------------------
+Email: ${email}
+Payment via UPI: ashishnaikbackup@okhdfcbank
+Send Payment Proof to: ashishnaikbackup@gmail.com
+
+Available Plans:
+🪶 Basic – ₹199 (1,000 checks)
+⚡ Pro – ₹499 (5,000 checks)
+🚀 Ultimate – ₹999 (15,000 checks)
+
+Note:
+- Please email payment proof after UPI transfer.
+- Once verified, your key and verified invoice will be sent manually.
+- This file acts as your purchase intent proof.
+
+Thank you for supporting our project!
+-----------------------------
+`;
+
+      const blob = new Blob([invoiceText], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `EmailVerification_Invoice_${email}.txt`;
+      link.click();
+    }
   </script>
 </body>
 </html>
