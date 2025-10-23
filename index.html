@@ -1,147 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Email Verification Access</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Truemailer — Block disposable emails</title>
+  <meta name="description" content="Truemailer — real-time email verification API. Block disposable/temporary emails and accept only trusted providers." />
+  <link rel="icon" href="data:," />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f4f6f8;
-      color: #222;
-      text-align: center;
-      padding: 30px;
+    :root{
+      --bg:#f7fbff;
+      --card:#ffffff;
+      --accent:#007aff;
+      --muted:#6b7280;
+      --dark:#0b1530;
+      --success:#16a34a;
+      --danger:#ef4444;
+      --radius:12px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    h1 { color: #111; margin-bottom: 10px; }
-    .container {
-      max-width: 480px;
-      margin: auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-    .price-box { margin: 20px 0; }
-    .plan {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-      margin: 10px 0;
-    }
-    .plan h3 { margin: 5px 0; }
-    .price { font-size: 22px; font-weight: bold; color: #007bff; margin: 5px 0; }
-    button {
-      background: #007bff; color: white;
-      border: none; padding: 12px 20px;
-      border-radius: 8px; cursor: pointer;
-      font-size: 15px; margin-top: 10px;
-    }
-    button:hover { background: #0056b3; }
-    input {
-      width: 100%; padding: 10px;
-      margin-top: 10px; border: 1px solid #ccc;
-      border-radius: 8px; font-size: 15px;
-    }
-    .note {
-      margin-top: 20px; font-size: 13px; color: gray;
-      line-height: 1.5;
-    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:var(--dark);-webkit-font-smoothing:antialiased}
+    .container{max-width:1100px;margin:36px auto;padding:20px}
+    header{display:flex;align-items:center;gap:18px}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo svg{width:48px;height:48px}
+    h1{font-size:28px;margin:0}
+    p.lead{margin:8px 0 0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:24px;margin-top:28px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:0 6px 18px rgba(11,21,48,0.06);padding:20px}
+    .demo-title{font-weight:600;margin:0 0 8px}
+    .input-row{display:flex;gap:8px}
+    input[type="text"], input[type="email"]{flex:1;padding:12px;border-radius:10px;border:1px solid #e6edf6;font-size:15px}
+    button.primary{background:var(--accent);color:#fff;padding:12px 14px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
+    .result{margin-top:12px;padding:12px;border-radius:10px;background:#f0f6ff;color:var(--dark)}
+    .result.good{border-left:6px solid var(--success)}
+    .result.bad{border-left:6px solid var(--danger)}
+    .small{font-size:13px;color:var(--muted)}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+    .feature{background:#fbfdff;padding:12px;border-radius:10px;border:1px solid #eef6ff}
+    .pricing{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .plan{flex:1;min-width:200px;padding:16px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfbff);border:1px solid #eef2ff}
+    footer{text-align:center;color:var(--muted);margin-top:26px;padding:18px 0}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.logo svg{width:42px;height:42px}.container{padding:12px}}
+    .tag{display:inline-block;background:#eef6ff;color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px}
+    .api-snippet{background:#0b1220;color:#fff;padding:12px;border-radius:10px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:13px}
+    .contact-row{display:flex;gap:12px;align-items:center}
+    .contact-row a{color:var(--accent);text-decoration:none;font-weight:600}
+    .foot-note{font-size:13px;color:var(--muted);margin-top:10px}
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Email Verification Access</h1>
-    <p>Access our verified disposable email checker securely.</p>
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="8" width="60" height="48" rx="8" fill="#fff" stroke="#e6f0ff"/>
+          <path d="M6 16l26 18L58 16" stroke="#cfe8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
+          <text x="32" y="42" fill="#fff" font-size="14" font-weight="700" text-anchor="middle" font-family="Inter, sans-serif">T</text>
+        </svg>
+        <div>
+          <h1>Truemailer</h1>
+          <p class="lead">Block disposable emails. Protect your signup, preserve your trials.</p>
+        </div>
+      </div>
+    </header>
 
-    <div class="price-box">
-      <h3>Available Plans</h3>
-      <div class="plan">
-        <h3>🪶 Basic Plan</h3>
-        <p>₹199 / one-time</p>
-        <p>Includes <b>1,000 checks</b></p>
-      </div>
-      <div class="plan">
-        <h3>⚡ Pro Plan</h3>
-        <p>₹499 / one-time</p>
-        <p>Includes <b>5,000 checks</b></p>
-      </div>
-      <div class="plan">
-        <h3>🚀 Ultimate Plan</h3>
-        <p>₹999 / one-time</p>
-        <p>Includes <b>15,000 checks</b></p>
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="tag">Real-time API</div>
+              <h2 style="margin:12px 0 4px">Stop fake signups — instantly</h2>
+              <p class="small">Truemailer checks public disposable lists, MX records and suspicious patterns to decide if an email is usable.</p>
+            </div>
+            <div style="text-align:right" class="small">
+              <div style="font-weight:700">Free demo</div>
+              <div>250 checks / month</div>
+            </div>
+          </div>
+
+          <div class="features">
+            <div class="feature"><strong>Updated lists</strong><div class="small">Public blocklists merged daily</div></div>
+            <div class="feature"><strong>Allowlist support</strong><div class="small">Whitelist trusted providers or domains</div></div>
+            <div class="feature"><strong>MX checks</strong><div class="small">Domains without mail servers marked suspicious</div></div>
+            <div class="feature"><strong>Low-latency</strong><div class="small">Cloudflare + Render edge mirror</div></div>
+          </div>
+
+          <h3 style="margin-top:16px">How devs integrate</h3>
+          <div class="api-snippet" id="api-snippet">
+POST https://truemailer-api.onrender.com/verify
+Body: {"email":"user@example.com"}
+          </div>
+          <div class="foot-note">Use header <code>x-api-key</code> if you provide a private client key.</div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+          <h3>Pricing & Payment</h3>
+          <div class="pricing">
+            <div class="plan"><strong>Basic</strong><div class="small">1,000 checks / one-time</div><div style="margin-top:12px;font-weight:700">₹199</div></div>
+            <div class="plan"><strong>Pro</strong><div class="small">5,000 checks / one-time</div><div style="margin-top:12px;font-weight:700">₹499</div></div>
+            <div class="plan"><strong>Ultimate</strong><div class="small">15,000 checks / one-time</div><div style="margin-top:12px;font-weight:700">₹999</div></div>
+          </div>
+
+          <div style="margin-top:18px">
+            <p><b>Pay via UPI:</b> ashishnaikbackup@okhdfcbank</p>
+            <p class="small">After payment, send payment ID or screenshot to <b>ashishnaikbackup@gmail.com</b>.<br>Once verified, your key and receipt will be shared manually.</p>
+
+            <div style="margin-top:10px">
+              <input type="email" id="invoiceEmail" placeholder="Enter your email for invoice" />
+              <button class="primary" onclick="generateInvoice()">Download Invoice (PDF)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+          <h3>Why Truemailer?</h3>
+          <ul class="small">
+            <li>Reduce fake signups and trial abuse</li>
+            <li>Decrease spam, improve analytics & ad spend</li>
+            <li>Small & fast — built for startups</li>
+          </ul>
+          <div style="margin-top:12px" class="contact-row">
+            <div><strong>Contact</strong><div class="small">ashishnaikbackup@gmail.com</div></div>
+            <div style="margin-left:auto"><a href="mailto:ashishnaikbackup@gmail.com">Email us</a></div>
+          </div>
+        </div>
       </div>
 
-      <p class="price">Pay via UPI:<br><b>ashishnaikbackup@okhdfcbank</b></p>
+      <!-- Demo Panel -->
+      <aside>
+        <div class="card">
+          <h3 class="demo-title">Try it now</h3>
+          <p class="small">Enter any email to test. Demo key is prefilled.</p>
+
+          <div style="margin-top:12px">
+            <div class="input-row">
+              <input id="demo-email" type="text" placeholder="name@example.com" />
+              <button id="check-btn" class="primary">Verify</button>
+            </div>
+
+            <div style="margin-top:8px" class="small">
+              <label>Demo usage</label>
+              <div style="margin-top:6px" class="api-snippet">Demo key: <strong>demo_key_123</strong></div>
+            </div>
+
+            <div id="result" class="result" style="display:none"></div>
+            <div id="loader" class="small" style="display:none;margin-top:8px">⏳ Checking…</div>
+          </div>
+        </div>
+      </aside>
     </div>
 
-    <p>📩 After payment, email your <b>payment screenshot or UPI ID</b> to:</p>
-    <p><b>ashishnaikbackup@gmail.com</b></p>
-    <p>We’ll verify and send your API key + final invoice manually.</p>
-
-    <h3 style="margin-top:25px;">Enter your Email (for record)</h3>
-    <input type="email" id="email" placeholder="example@email.com" required>
-    <button onclick="generateInvoice()">Download Invoice</button>
-
-    <p class="note">
-      *Ensure correct email before clicking “Download.”<br>
-      *Don’t click without completing payment.<br>
-      *Send payment proof via email to receive your key.
-    </p>
+    <footer>
+      <div>© <strong>Truemailer</strong> — Built with ❤️</div>
+      <div class="foot-note">This system checks only publicly available disposable email domains. False positives may occur. Contact us for whitelisting.</div>
+    </footer>
   </div>
 
   <script>
-    function validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
+    const WORKER_URL = "https://truemailer-api.onrender.com/verify";
+    const btn = document.getElementById("check-btn");
+    const emailInput = document.getElementById("demo-email");
+    const resultDiv = document.getElementById("result");
+    const loader = document.getElementById("loader");
+
+    function showResult(obj){
+      resultDiv.style.display = "block";
+      resultDiv.className = "result " + (obj.is_disposable || obj.valid === false ? "bad" : "good");
+      if(obj.valid === false || obj.is_disposable){
+        resultDiv.innerHTML = `<strong style="color:var(--danger)">Blocked:</strong> ${obj.reason || "Disposable or invalid"}<div class="small" style="margin-top:8px">${obj.email}</div>`;
+      } else {
+        resultDiv.innerHTML = `<strong style="color:var(--success)">Allowed:</strong> ${obj.reason || "Valid"}<div class="small" style="margin-top:8px">${obj.email}</div>`;
+      }
     }
 
-    function generateInvoice() {
-      const email = document.getElementById('email').value.trim();
-
-      if (!email) {
-        alert('❗ Please enter your email before downloading the invoice.');
-        return;
+    btn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      if(!email){ resultDiv.style.display="block"; resultDiv.className="result bad"; resultDiv.innerText="Please type an email."; return; }
+      loader.style.display = "block";
+      resultDiv.style.display = "none";
+      try{
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, api_key: "demo_key_123" })
+        });
+        const data = await res.json();
+        let parsed = { valid: true, is_disposable: false, reason: "Valid", email };
+        if(typeof data === "object"){
+          parsed.valid = data.valid !== undefined ? data.valid : (data.is_disposable === undefined ? true : !data.is_disposable);
+          parsed.is_disposable = data.is_disposable !== undefined ? data.is_disposable : (!parsed.valid);
+          parsed.reason = data.reason || data.message || (parsed.is_disposable ? "Blocked" : "Allowed");
+          parsed.email = data.email || email;
+        }
+        showResult(parsed);
+      }catch(err){
+        resultDiv.style.display = "block";
+        resultDiv.className="result bad";
+        resultDiv.innerText = "⚠️ Network or server error. Try again later.";
+      }finally{
+        loader.style.display = "none";
       }
+    });
 
-      if (!validateEmail(email)) {
-        alert('⚠️ Please enter a valid email address.');
-        return;
-      }
-
-      const confirmProceed = confirm(
-        'Have you made the UPI payment to ashishnaikbackup@okhdfcbank?\n\nClick OK to continue and download invoice.'
-      );
-
-      if (!confirmProceed) return;
-
-      const invoiceText = `
------------------------------
-Email Verification Access
------------------------------
-Email: ${email}
-Payment via UPI: ashishnaikbackup@okhdfcbank
-Send Payment Proof to: ashishnaikbackup@gmail.com
-
-Available Plans:
-🪶 Basic – ₹199 (1,000 checks)
-⚡ Pro – ₹499 (5,000 checks)
-🚀 Ultimate – ₹999 (15,000 checks)
-
-Note:
-- Please email payment proof after UPI transfer.
-- Once verified, your key and verified invoice will be sent manually.
-- This file acts as your purchase intent proof.
-
-Thank you for supporting our project!
------------------------------
-`;
-
-      const blob = new Blob([invoiceText], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `EmailVerification_Invoice_${email}.txt`;
-      link.click();
+    async function generateInvoice() {
+      const { jsPDF } = window.jspdf;
+      const email = document.getElementById('invoiceEmail').value.trim();
+      if (!email) return alert("Please enter your email first.");
+      const doc = new jsPDF();
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(18);
+      doc.text("Truemailer Invoice", 20, 20);
+      doc.setFontSize(12);
+      doc.text("Email: " + email, 20, 35);
+      doc.text("UPI: ashishnaikbackup@okhdfcbank", 20, 45);
+      doc.text("Send payment proof to: ashishnaikbackup@gmail.com", 20, 55);
+      doc.text("----------------------------------------------------", 20, 65);
+      doc.text("Plans:", 20, 75);
+      doc.text("Basic - ₹199 (1,000 checks)", 20, 85);
+      doc.text("Pro - ₹499 (5,000 checks)", 20, 95);
+      doc.text("Ultimate - ₹999 (15,000 checks)", 20, 105);
+      doc.text("----------------------------------------------------", 20, 115);
+      doc.text("Note:", 20, 125);
+      doc.text("- Please email payment proof after UPI transfer.", 20, 135);
+      doc.text("- Once verified, your key and official invoice will be sent manually.", 20, 145);
+      doc.text("----------------------------------------------------", 20, 155);
+      doc.text("Auto-generated by Truemailer System — No signature required", 20, 165);
+      doc.save(`Truemailer_Invoice_${email}.pdf`);
     }
   </script>
 </body>
-</html>
+                                           </html>
