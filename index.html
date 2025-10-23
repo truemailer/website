@@ -1,236 +1,169 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Truemailer — Block disposable emails</title>
-  <meta name="description" content="Truemailer — real-time email verification API. Block disposable/temporary emails and accept only trusted providers." />
-  <link rel="icon" href="data:," />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Truemailer – Block Disposable Emails Instantly</title>
   <style>
-    :root{
-      --bg:#f7fbff;
-      --card:#ffffff;
-      --accent:#007aff;
-      --muted:#6b7280;
-      --dark:#0b1530;
-      --success:#16a34a;
-      --danger:#ef4444;
-      --radius:12px;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    body {
+      font-family: "Inter", sans-serif;
+      margin: 0;
+      background: #f9fafb;
+      color: #111827;
+      line-height: 1.6;
     }
-    *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:var(--dark);-webkit-font-smoothing:antialiased}
-    .container{max-width:1100px;margin:36px auto;padding:20px}
-    header{display:flex;align-items:center;gap:18px}
-    .logo{display:flex;align-items:center;gap:12px}
-    .logo svg{width:48px;height:48px}
-    h1{font-size:28px;margin:0}
-    p.lead{margin:8px 0 0;color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr 420px;gap:24px;margin-top:28px}
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:0 6px 18px rgba(11,21,48,0.06);padding:20px}
-    .demo-title{font-weight:600;margin:0 0 8px}
-    .input-row{display:flex;gap:8px}
-    input[type="text"], input[type="email"]{flex:1;padding:12px;border-radius:10px;border:1px solid #e6edf6;font-size:15px}
-    button.primary{background:var(--accent);color:#fff;padding:12px 14px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
-    .result{margin-top:12px;padding:12px;border-radius:10px;background:#f0f6ff;color:var(--dark)}
-    .result.good{border-left:6px solid var(--success)}
-    .result.bad{border-left:6px solid var(--danger)}
-    .small{font-size:13px;color:var(--muted)}
-    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
-    .feature{background:#fbfdff;padding:12px;border-radius:10px;border:1px solid #eef6ff}
-    .pricing{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
-    .plan{flex:1;min-width:200px;padding:16px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfbff);border:1px solid #eef2ff}
-    footer{text-align:center;color:var(--muted);margin-top:26px;padding:18px 0}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}.logo svg{width:42px;height:42px}.container{padding:12px}}
-    .tag{display:inline-block;background:#eef6ff;color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px}
-    .api-snippet{background:#0b1220;color:#fff;padding:12px;border-radius:10px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:13px}
-    .contact-row{display:flex;gap:12px;align-items:center}
-    .contact-row a{color:var(--accent);text-decoration:none;font-weight:600}
-    .foot-note{font-size:13px;color:var(--muted);margin-top:10px}
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      color: #cbd5e1;
+    }
+    main {
+      max-width: 750px;
+      margin: 3rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    h2 {
+      color: #1e293b;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    #result {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+      font-weight: 500;
+    }
+    .valid {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .invalid {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .contact {
+      margin-top: 3rem;
+      background: #f1f5f9;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+    footer {
+      text-align: center;
+      color: #64748b;
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="2" y="8" width="60" height="48" rx="8" fill="#fff" stroke="#e6f0ff"/>
-          <path d="M6 16l26 18L58 16" stroke="#cfe8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
-          <text x="32" y="42" fill="#fff" font-size="14" font-weight="700" text-anchor="middle" font-family="Inter, sans-serif">T</text>
-        </svg>
-        <div>
-          <h1>Truemailer</h1>
-          <p class="lead">Block disposable emails. Protect your signup, preserve your trials.</p>
-        </div>
-      </div>
-    </header>
+  <header>
+    <h1>Truemailer</h1>
+    <p>Block disposable, fake, and temporary emails before they enter your system.</p>
+  </header>
 
-    <div class="grid">
-      <div>
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div class="tag">Real-time API</div>
-              <h2 style="margin:12px 0 4px">Stop fake signups — instantly</h2>
-              <p class="small">Truemailer checks public disposable lists, MX records and suspicious patterns to decide if an email is usable.</p>
-            </div>
-            <div style="text-align:right" class="small">
-              <div style="font-weight:700">Free demo</div>
-              <div>250 checks / month</div>
-            </div>
-          </div>
+  <main>
+    <section>
+      <h2>Try Our API Demo</h2>
+      <p>Enter an email address to check if it’s disposable or valid.</p>
+      <input type="email" id="emailInput" placeholder="Enter email..." />
+      <button onclick="checkEmail()">Check</button>
+      <div id="result"></div>
+    </section>
 
-          <div class="features">
-            <div class="feature"><strong>Updated lists</strong><div class="small">Public blocklists merged daily</div></div>
-            <div class="feature"><strong>Allowlist support</strong><div class="small">Whitelist trusted providers or domains</div></div>
-            <div class="feature"><strong>MX checks</strong><div class="small">Domains without mail servers marked suspicious</div></div>
-            <div class="feature"><strong>Low-latency</strong><div class="small">Cloudflare + Render edge mirror</div></div>
-          </div>
+    <section class="contact">
+      <h2>Need a Truemailer API Key?</h2>
+      <p>
+        To get access or learn more, email us at 
+        <strong>ashishnaikbackup@gmail.com</strong>.
+      </p>
+      <p>
+        We’ll guide you through setup, pricing, and integration.
+      </p>
+      <p><em>Your privacy, our priority — we only block publicly disposable and temporary email domains.</em></p>
+    </section>
+  </main>
 
-          <h3 style="margin-top:16px">How devs integrate</h3>
-          <div class="api-snippet" id="api-snippet">
-POST https://truemailer-api.onrender.com/verify
-Body: {"email":"user@example.com"}
-          </div>
-          <div class="foot-note">Use header <code>x-api-key</code> if you provide a private client key.</div>
-        </div>
-
-        <div class="card" style="margin-top:18px">
-          <h3>Pricing & Payment</h3>
-          <div class="pricing">
-            <div class="plan"><strong>Basic</strong><div class="small">1,000 checks / one-time</div><div style="margin-top:12px;font-weight:700">₹199</div></div>
-            <div class="plan"><strong>Pro</strong><div class="small">5,000 checks / one-time</div><div style="margin-top:12px;font-weight:700">₹499</div></div>
-            <div class="plan"><strong>Ultimate</strong><div class="small">15,000 checks / one-time</div><div style="margin-top:12px;font-weight:700">₹999</div></div>
-          </div>
-
-          <div style="margin-top:18px">
-            <p><b>Pay via UPI:</b> ashishnaikbackup@okhdfcbank</p>
-            <p class="small">After payment, send payment ID or screenshot to <b>ashishnaikbackup@gmail.com</b>.<br>Once verified, your key and receipt will be shared manually.</p>
-
-            <div style="margin-top:10px">
-              <input type="email" id="invoiceEmail" placeholder="Enter your email for invoice" />
-              <button class="primary" onclick="generateInvoice()">Download Invoice (PDF)</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:18px">
-          <h3>Why Truemailer?</h3>
-          <ul class="small">
-            <li>Reduce fake signups and trial abuse</li>
-            <li>Decrease spam, improve analytics & ad spend</li>
-            <li>Small & fast — built for startups</li>
-          </ul>
-          <div style="margin-top:12px" class="contact-row">
-            <div><strong>Contact</strong><div class="small">ashishnaikbackup@gmail.com</div></div>
-            <div style="margin-left:auto"><a href="mailto:ashishnaikbackup@gmail.com">Email us</a></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Demo Panel -->
-      <aside>
-        <div class="card">
-          <h3 class="demo-title">Try it now</h3>
-          <p class="small">Enter any email to test. Demo key is prefilled.</p>
-
-          <div style="margin-top:12px">
-            <div class="input-row">
-              <input id="demo-email" type="text" placeholder="name@example.com" />
-              <button id="check-btn" class="primary">Verify</button>
-            </div>
-
-            <div style="margin-top:8px" class="small">
-              <label>Demo usage</label>
-              <div style="margin-top:6px" class="api-snippet">Demo key: <strong>demo_key_123</strong></div>
-            </div>
-
-            <div id="result" class="result" style="display:none"></div>
-            <div id="loader" class="small" style="display:none;margin-top:8px">⏳ Checking…</div>
-          </div>
-        </div>
-      </aside>
-    </div>
-
-    <footer>
-      <div>© <strong>Truemailer</strong> — Built with ❤️</div>
-      <div class="foot-note">This system checks only publicly available disposable email domains. False positives may occur. Contact us for whitelisting.</div>
-    </footer>
-  </div>
+  <footer>
+    © 2025 Truemailer — Built to keep your platform clean and secure.
+  </footer>
 
   <script>
-    const WORKER_URL = "https://truemailer-api.onrender.com/verify";
-    const btn = document.getElementById("check-btn");
-    const emailInput = document.getElementById("demo-email");
-    const resultDiv = document.getElementById("result");
-    const loader = document.getElementById("loader");
+    async function checkEmail() {
+      const email = document.getElementById("emailInput").value;
+      if (!email) return alert("Please enter an email address.");
 
-    function showResult(obj){
-      resultDiv.style.display = "block";
-      resultDiv.className = "result " + (obj.is_disposable || obj.valid === false ? "bad" : "good");
-      if(obj.valid === false || obj.is_disposable){
-        resultDiv.innerHTML = `<strong style="color:var(--danger)">Blocked:</strong> ${obj.reason || "Disposable or invalid"}<div class="small" style="margin-top:8px">${obj.email}</div>`;
-      } else {
-        resultDiv.innerHTML = `<strong style="color:var(--success)">Allowed:</strong> ${obj.reason || "Valid"}<div class="small" style="margin-top:8px">${obj.email}</div>`;
-      }
-    }
+      const button = document.querySelector("button");
+      button.disabled = true;
+      button.textContent = "Checking...";
 
-    btn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      if(!email){ resultDiv.style.display="block"; resultDiv.className="result bad"; resultDiv.innerText="Please type an email."; return; }
-      loader.style.display = "block";
-      resultDiv.style.display = "none";
-      try{
-        const res = await fetch(WORKER_URL, {
+      try {
+        const res = await fetch("/check_email", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, api_key: "demo_key_123" })
+          body: JSON.stringify({ email }),
         });
+
         const data = await res.json();
-        let parsed = { valid: true, is_disposable: false, reason: "Valid", email };
-        if(typeof data === "object"){
-          parsed.valid = data.valid !== undefined ? data.valid : (data.is_disposable === undefined ? true : !data.is_disposable);
-          parsed.is_disposable = data.is_disposable !== undefined ? data.is_disposable : (!parsed.valid);
-          parsed.reason = data.reason || data.message || (parsed.is_disposable ? "Blocked" : "Allowed");
-          parsed.email = data.email || email;
-        }
-        showResult(parsed);
-      }catch(err){
+        const resultDiv = document.getElementById("result");
         resultDiv.style.display = "block";
-        resultDiv.className="result bad";
-        resultDiv.innerText = "⚠️ Network or server error. Try again later.";
-      }finally{
-        loader.style.display = "none";
+
+        if (res.ok && data.valid === false) {
+          resultDiv.textContent = "❌ Disposable or temporary email detected.";
+          resultDiv.className = "invalid";
+        } else if (res.ok && data.valid === true) {
+          resultDiv.textContent = "✅ Valid email address.";
+          resultDiv.className = "valid";
+        } else {
+          resultDiv.textContent = "⚠️ Error checking email. Try again later.";
+          resultDiv.className = "invalid";
+        }
+      } catch (err) {
+        alert("Network error. Please try again.");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Check";
+      }
+    }
+
+    document.getElementById("emailInput").addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        checkEmail();
       }
     });
-
-    async function generateInvoice() {
-      const { jsPDF } = window.jspdf;
-      const email = document.getElementById('invoiceEmail').value.trim();
-      if (!email) return alert("Please enter your email first.");
-      const doc = new jsPDF();
-      doc.setFont("helvetica","normal");
-      doc.setFontSize(18);
-      doc.text("Truemailer Invoice", 20, 20);
-      doc.setFontSize(12);
-      doc.text("Email: " + email, 20, 35);
-      doc.text("UPI: ashishnaikbackup@okhdfcbank", 20, 45);
-      doc.text("Send payment proof to: ashishnaikbackup@gmail.com", 20, 55);
-      doc.text("----------------------------------------------------", 20, 65);
-      doc.text("Plans:", 20, 75);
-      doc.text("Basic - ₹199 (1,000 checks)", 20, 85);
-      doc.text("Pro - ₹499 (5,000 checks)", 20, 95);
-      doc.text("Ultimate - ₹999 (15,000 checks)", 20, 105);
-      doc.text("----------------------------------------------------", 20, 115);
-      doc.text("Note:", 20, 125);
-      doc.text("- Please email payment proof after UPI transfer.", 20, 135);
-      doc.text("- Once verified, your key and official invoice will be sent manually.", 20, 145);
-      doc.text("----------------------------------------------------", 20, 155);
-      doc.text("Auto-generated by Truemailer System — No signature required", 20, 165);
-      doc.save(`Truemailer_Invoice_${email}.pdf`);
-    }
   </script>
 </body>
-                                           </html>
+</html>
