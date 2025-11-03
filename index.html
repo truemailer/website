@@ -3,196 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Truemailer - Email Verification API</title>
+  <title>Truemailer - Block Disposable Emails Instantly</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9fbfd;
       margin: 0;
-      padding: 0;
-      color: #333;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0047ab, #007bff);
+      color: white;
+      text-align: center;
     }
     header {
-      background-color: #0056d6;
-      color: #fff;
-      padding: 15px 0;
-      text-align: center;
+      padding: 40px 10px 20px;
     }
     header img {
-      height: 45px;
-      vertical-align: middle;
-      margin-right: 10px;
-    }
-    header h1 {
-      display: inline;
-      font-size: 26px;
-      font-weight: 600;
-      vertical-align: middle;
-    }
-    .container {
-      max-width: 750px;
-      background: #fff;
-      margin: 40px auto;
-      padding: 25px 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .container h2 {
-      color: #0056d6;
-      text-align: center;
-      font-size: 22px;
+      height: 70px;
       margin-bottom: 10px;
     }
-    .email-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 20px 0;
+    h1 {
+      font-size: 2.2em;
+      margin: 10px 0;
     }
-    input[type="email"] {
+    p {
+      color: #e0e0e0;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .test-box {
+      background: white;
+      color: black;
+      border-radius: 12px;
+      width: 320px;
+      max-width: 90%;
+      margin: 0 auto 40px;
+      padding: 25px;
+    }
+    input {
+      width: 85%;
       padding: 10px;
-      width: 70%;
-      font-size: 15px;
-      border: 2px solid #0056d6;
-      border-radius: 8px;
-      outline: none;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      font-size: 1em;
     }
     button {
-      background-color: #0056d6;
-      color: #fff;
+      background: #007bff;
       border: none;
-      padding: 10px 18px;
-      margin-left: 8px;
-      border-radius: 8px;
-      font-size: 15px;
+      padding: 10px 20px;
+      color: white;
+      font-size: 1em;
+      border-radius: 6px;
       cursor: pointer;
-      transition: 0.3s;
     }
     button:hover {
-      background-color: #003c9e;
+      background: #0056b3;
     }
-    #result {
-      text-align: center;
-      font-size: 16px;
-      font-weight: 500;
+    .result {
       margin-top: 10px;
+      font-weight: bold;
     }
-    .plans {
-      text-align: center;
-      margin-top: 40px;
+    .pricing {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 40px auto;
+      max-width: 900px;
     }
-    .plan {
-      display: inline-block;
-      background: #eef3ff;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 10px;
-      width: 200px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 25px;
+      width: 250px;
+      backdrop-filter: blur(5px);
     }
-    .plan h3 {
-      margin-top: 0;
-      color: #0056d6;
+    .card h2 {
+      color: white;
     }
-    .plan p {
-      font-size: 14px;
-      color: #444;
-    }
-    .plan button {
-      margin-top: 10px;
-      background: #0056d6;
+    .card p {
+      color: #ddd;
     }
     footer {
-      text-align: center;
-      margin-top: 50px;
+      margin-top: 60px;
       padding: 20px;
-      background: #f0f4ff;
-      border-top: 1px solid #cfd9ff;
-      color: #333;
-      font-size: 14px;
+      color: #ddd;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://i.ibb.co/8DdzrQW/truemailer-logo.png" alt="Truemailer Logo" />
+    <img src="https://i.ibb.co/VWfXc3n/truemailer-logo.png" alt="Truemailer Logo">
     <h1>Truemailer</h1>
+    <p>Block disposable, fake, and temporary emails before they enter your system.  
+       Keep your platform clean and real — instantly.</p>
   </header>
 
-  <div class="container">
-    <h2>Check Email Validity Instantly</h2>
-    <p style="text-align:center;color:#444;">Enter an email to verify if it’s real or disposable.</p>
-    <div class="email-box">
-      <input type="email" id="email" placeholder="Enter email address..." />
-      <button onclick="checkEmail()">Check</button>
-    </div>
-    <div id="result"></div>
+  <section class="test-box">
+    <h3>🔍 Test an Email</h3>
+    <input type="email" id="emailInput" placeholder="Enter email to check" />
+    <button onclick="checkEmail()">Check</button>
+    <div class="result" id="result"></div>
+  </section>
 
-    <div class="plans">
-      <h2>Plans</h2>
-      <div class="plan">
-        <h3>Starter</h3>
-        <p>₹199 /month<br>Up to 5,000 checks</p>
-        <button onclick="contactMail('Starter Plan ₹199')">Buy Plan</button>
+  <section>
+    <h2>💼 Our Plans</h2>
+    <div class="pricing">
+      <div class="card">
+        <h2>₹199</h2>
+        <p>Up to 2,000 Checks</p>
       </div>
-      <div class="plan">
-        <h3>Growth</h3>
-        <p>₹499 /month<br>Up to 25,000 checks</p>
-        <button onclick="contactMail('Growth Plan ₹499')">Buy Plan</button>
+      <div class="card">
+        <h2>₹499</h2>
+        <p>Up to 7,000 Checks</p>
       </div>
-      <div class="plan">
-        <h3>Scale</h3>
-        <p>₹999 /month<br>Up to 60,000 checks</p>
-        <button onclick="contactMail('Scale Plan ₹999')">Buy Plan</button>
+      <div class="card">
+        <h2>₹999</h2>
+        <p>Up to 20,000 Checks</p>
       </div>
     </div>
-  </div>
+    <p>To purchase a plan or get support, contact us at  
+       <b>ashishnaikbackup@gmail.com</b></p>
+  </section>
 
   <footer>
-    <p>Made with ❤️ by Ashish</p>
-    <p>Need help or custom plans? Contact: <a href="mailto:ashishnaikbackup@gmail.com">ashishnaikbackup@gmail.com</a></p>
+    <p>Made with ❤️ by Truemailer</p>
+    <p>Note: We block only publicly available disposable domains.  
+    False positives may occur occasionally.</p>
   </footer>
 
   <script>
-    async function checkEmail() {
-      const email = document.getElementById("email").value.trim();
-      const resultDiv = document.getElementById("result");
-      if (!email) {
-        resultDiv.innerHTML = "⚠️ Please enter an email.";
-        resultDiv.style.color = "red";
-        return;
+    const input = document.getElementById("emailInput");
+    input.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        checkEmail();
       }
-
-      try {
-        resultDiv.innerHTML = "⏳ Checking...";
-        const res = await fetch("https://truemailer-api.onrender.com/verify?email=" + encodeURIComponent(email));
-        const data = await res.json();
-
-        if (data.valid) {
-          resultDiv.innerHTML = "✅ Valid Email";
-          resultDiv.style.color = "green";
-        } else if (data.disposable) {
-          resultDiv.innerHTML = "⚠️ Disposable Email Detected";
-          resultDiv.style.color = "orange";
-        } else {
-          resultDiv.innerHTML = "❌ Invalid Email";
-          resultDiv.style.color = "red";
-        }
-      } catch (error) {
-        resultDiv.innerHTML = "Server unreachable. Please try again later.";
-        resultDiv.style.color = "red";
-      }
-    }
-
-    // Allow pressing Enter to check email
-    document.getElementById("email").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") checkEmail();
     });
 
-    function contactMail(plan) {
-      const subject = encodeURIComponent("Interested in " + plan);
-      const body = encodeURIComponent("Hello,\n\nI’d like to purchase the " + plan + ".\n\nPlease share payment details.\n\nThanks,\n");
-      window.location.href = `mailto:ashishnaikbackup@gmail.com?subject=${subject}&body=${body}`;
+    async function checkEmail() {
+      const email = document.getElementById("emailInput").value.trim();
+      const result = document.getElementById("result");
+      if (!email) {
+        result.innerHTML = "Please enter an email.";
+        return;
+      }
+      result.innerHTML = "Checking...";
+      try {
+        const res = await fetch(`https://truemailer.onrender.com/check?email=${email}`);
+        const data = await res.json();
+        if (data.disposable) {
+          result.innerHTML = "❌ Disposable Email Detected!";
+          result.style.color = "red";
+        } else {
+          result.innerHTML = "✅ Safe Email Address!";
+          result.style.color = "green";
+        }
+      } catch (e) {
+        result.innerHTML = "Server unreachable. Please try again later.";
+        result.style.color = "orange";
+      }
     }
   </script>
 </body>
