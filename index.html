@@ -1,171 +1,333 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Truemailer — Block Disposable Emails</title>
-  <meta name="description" content="Truemailer — real-time API to block disposable, fake, and temporary emails. Protect your signups and preserve trial integrity." />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="icon" href="data:," />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    :root {
-      --bg: #f7fbff;
-      --card: #ffffff;
-      --accent: #007aff;
-      --muted: #6b7280;
-      --dark: #0b1530;
-      --success: #16a34a;
-      --danger: #ef4444;
-      --radius: 12px;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: linear-gradient(180deg, var(--bg), #fff);
-      color: var(--dark);
-      -webkit-font-smoothing: antialiased;
-    }
-    .container { max-width: 1100px; margin: 36px auto; padding: 20px; }
-    header { display: flex; align-items: center; gap: 18px; }
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .logo svg { width: 48px; height: 48px; }
-    h1 { font-size: 28px; margin: 0; }
-    p.lead { margin: 8px 0 0; color: var(--muted); }
-    .grid { display: grid; grid-template-columns: 1fr 420px; gap: 24px; margin-top: 28px; }
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: 0 6px 18px rgba(11, 21, 48, 0.06);
-      padding: 20px;
-    }
-    .input-row { display: flex; gap: 8px; }
-    input[type="text"], input[type="email"] {
-      flex: 1; padding: 12px; border-radius: 10px;
-      border: 1px solid #e6edf6; font-size: 15px;
-    }
-    button.primary {
-      background: var(--accent); color: #fff;
-      padding: 12px 14px; border-radius: 10px;
-      border: 0; font-weight: 600; cursor: pointer;
-    }
-    .result {
-      margin-top: 12px; padding: 12px;
-      border-radius: 10px; background: #f0f6ff; color: var(--dark);
-    }
-    .result.good { border-left: 6px solid var(--success); }
-    .result.bad { border-left: 6px solid var(--danger); }
-    .small { font-size: 13px; color: var(--muted); }
-    footer { text-align: center; color: var(--muted); margin-top: 26px; padding: 18px 0; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <div class="logo">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="2" y="8" width="60" height="48" rx="8" fill="#fff" stroke="#e6f0ff"/>
-          <path d="M6 16l26 18L58 16" stroke="#cfe8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
-          <text x="32" y="42" fill="#fff" font-size="14" font-weight="700" text-anchor="middle" font-family="Inter, sans-serif">T</text>
-        </svg>
-        <div>
-          <h1>Truemailer</h1>
-          <p class="lead">Block disposable emails. Protect your signup, preserve your trials.</p>
-        </div>
-      </div>
-    </header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truemailer — Block Disposable Emails</title><style>
+:root{
+--bg:#f5f9ff;
+--card:#fff;
+--primary:#007aff;
+--primary-light:#eaf4ff;
+--text:#0f172a;
+--muted:#64748b;
+--success:#16a34a;
+--danger:#ef4444;
+--radius:18px;
+}
 
-    <div class="grid">
-      <div>
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div class="small" style="color:var(--accent);font-weight:600;">Real-time API</div>
-              <h2 style="margin:12px 0 4px">Stop fake signups instantly</h2>
-              <p class="small">Truemailer checks public disposable lists and MX records to ensure only real users sign up.</p>
-            </div>
-            <div class="small" style="text-align:right;">
-              <div style="font-weight:700">Free demo</div>
-              <div>250 checks / month</div>
-            </div>
-          </div>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-          <h3 style="margin-top:16px">How developers integrate</h3>
-          <div class="small" style="background:#0b1220;color:white;padding:10px;border-radius:10px;font-family:monospace;">
-POST https://truemailer-api.onrender.com/verify/
-Body: {"email":"user@example.com"}
-          </div>
-          <p class="small">Use header <code>x-api-key</code> for private keys.</p>
-        </div>
+body{
+font-family:Inter,Arial,sans-serif;
+background:linear-gradient(180deg,#f5f9ff,#fff);
+color:var(--text);
+min-height:100vh;
+}
 
-      <aside>
-        <div class="card">
-          <h3>Try it now</h3>
-          <p class="small">Enter an email to check. Demo key auto-enabled.</p>
-          <div class="input-row">
-            <input id="demo-email" type="text" placeholder="name@example.com" />
-            <button id="check-btn" class="primary">Verify</button>
-          </div>
-          <div id="result" class="result" style="display:none;"></div>
-          <div id="loader" class="small" style="display:none;margin-top:8px;">⏳ Checking…</div>
-        </div>
-      </aside>
-    </div>
+.container{
+max-width:1200px;
+margin:auto;
+padding:24px;
+}
 
-  <script>
-    const WORKER_URL = "https://truemailer-api.onrender.com/verify/";
-    const btn = document.getElementById("check-btn");
-    const emailInput = document.getElementById("demo-email");
-    const resultDiv = document.getElementById("result");
-    const loader = document.getElementById("loader");
+header{
+text-align:center;
+margin-bottom:50px;
+}
 
-    function showResult(obj) {
-      resultDiv.style.display = "block";
-      resultDiv.className = "result " + (obj.is_disposable || obj.valid === false ? "bad" : "good");
-      resultDiv.innerHTML = obj.valid === false || obj.is_disposable
-        ? `❌ <strong>Blocked:</strong> ${obj.reason || "Disposable or invalid"}<div class="small">${obj.email}</div>`
-        : `✅ <strong>Allowed:</strong> ${obj.reason || "Valid"}<div class="small">${obj.email}</div>`;
-    }
+.logo{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+}
 
-    async function checkEmail() {
-      const email = emailInput.value.trim();
-      if (!email) {
-        resultDiv.style.display = "block";
-        resultDiv.className = "result bad";
-        resultDiv.innerText = "Please type an email.";
-        return;
-      }
-      loader.style.display = "block";
-      resultDiv.style.display = "none";
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, api_key: "demo_key_123" })
-        });
-        const data = await res.json();
-        showResult(data);
-      } catch {
-        resultDiv.style.display = "block";
-        resultDiv.className = "result bad";
-        resultDiv.innerText = "⚠️ Server unreachable. Try again later.";
-      } finally {
-        loader.style.display = "none";
-      }
-    }
+.logo svg{
+width:60px;
+height:60px;
+}
 
-    btn.addEventListener("click", checkEmail);
-    emailInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") checkEmail();
-    });
-  </script>
+h1{
+font-size:2rem;
+font-weight:800;
+}
 
-  <footer>
-      <p>© <strong>Truemailer</strong> — Built with ❤️</p>
-      <p class="small">We block publicly available disposable domains. False positives may occur. Contact us for whitelisting.</p>
-    </footer>
-    </div>
-</body>
+.lead{
+color:var(--muted);
+margin-top:10px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 380px;
+gap:24px;
+}
+
+.card{
+background:var(--card);
+border-radius:var(--radius);
+padding:24px;
+box-shadow:0 4px 20px rgba(0,0,0,.06);
+}
+
+.badge{
+display:inline-block;
+background:var(--primary-light);
+color:var(--primary);
+padding:8px 14px;
+border-radius:999px;
+font-size:.85rem;
+font-weight:600;
+}
+
+.hero-title{
+font-size:2.6rem;
+font-weight:800;
+margin:18px 0 12px;
+line-height:1.1;
+}
+
+.hero-text{
+color:var(--muted);
+line-height:1.7;
+}
+
+.code{
+background:#0f172a;
+color:white;
+padding:18px;
+border-radius:14px;
+margin-top:20px;
+font-family:monospace;
+overflow:auto;
+}
+
+.input-row{
+display:flex;
+gap:10px;
+}
+
+input{
+flex:1;
+padding:14px;
+border:1px solid #dbe4f0;
+border-radius:12px;
+font-size:15px;
+}
+
+button{
+background:var(--primary);
+color:white;
+border:none;
+padding:14px 18px;
+border-radius:12px;
+cursor:pointer;
+font-weight:600;
+}
+
+.result{
+margin-top:15px;
+padding:15px;
+border-radius:12px;
+}
+
+.result.good{
+background:#ecfdf3;
+border-left:5px solid var(--success);
+}
+
+.result.bad{
+background:#fef2f2;
+border-left:5px solid var(--danger);
+}
+
+.small{
+font-size:.9rem;
+color:var(--muted);
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+margin-top:25px;
+}
+
+.feature{
+background:#f8fbff;
+padding:18px;
+border-radius:14px;
+}
+
+.feature h4{
+margin-bottom:8px;
+}
+
+footer{
+text-align:center;
+padding:40px 0;
+color:var(--muted);
+margin-top:50px;
+}
+
+@media(max-width:900px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.features{
+grid-template-columns:1fr;
+}
+
+.hero-title{
+font-size:2rem;
+}
+
+.input-row{
+flex-direction:column;
+}
+
+button{
+width:100%;
+}
+
+}
+</style></head><body><div class="container"><header>
+<div class="logo"><svg viewBox="0 0 64 64">
+<rect x="2" y="8" width="60" height="48" rx="8" fill="white" stroke="#e6f0ff"/>
+<path d="M6 16L32 34L58 16" stroke="#cfe8ff" stroke-width="2.5"/>
+<rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
+<text x="32" y="42" fill="white" text-anchor="middle" font-size="14" font-weight="700">T</text>
+</svg><div>
+<h1>Truemailer</h1>
+<p class="lead">
+Block disposable emails. Protect your signup flow.
+</p>
+</div></div>
+</header><div class="grid"><div class="card"><span class="badge">
+Real-Time Email Verification API
+</span><h2 class="hero-title">
+Block Disposable Emails Before They Sign Up
+</h2><p class="hero-text">
+Truemailer helps SaaS companies stop temporary, fake and disposable email addresses from abusing free trials and creating spam accounts.
+</p><div class="code">
+POST https://truemailer-api.onrender.com/verify/{
+"email":"user@example.com"
+}
+
+</div><p class="small" style="margin-top:15px;">
+Use x-api-key for production integrations.
+</p><div class="features"><div class="feature">
+<h4>⚡ Instant</h4>
+<p class="small">
+Real-time email verification.
+</p>
+</div><div class="feature">
+<h4>🛡️ Secure</h4>
+<p class="small">
+Protect trials and signups.
+</p>
+</div><div class="feature">
+<h4>🌍 Global</h4>
+<p class="small">
+Detect disposable domains worldwide.
+</p>
+</div></div></div><div class="card"><h3>Try Truemailer Free</h3><p class="small" style="margin:10px 0 18px;">
+Check any email instantly using our demo API key.
+</p><div class="input-row">
+<input id="demo-email" type="text" placeholder="name@example.com">
+<button id="check-btn">Verify</button>
+</div><div id="result" class="result" style="display:none"></div><div id="loader" class="small" style="display:none;margin-top:10px;">
+⏳ Checking...
+</div></div></div><footer>
+<p><strong>© Truemailer</strong></p>
+<p class="small">
+Built for developers who care about clean signups.
+</p>
+</footer></div><script>
+const WORKER_URL="https://truemailer-api.onrender.com/verify/";
+
+const btn=document.getElementById("check-btn");
+const emailInput=document.getElementById("demo-email");
+const resultDiv=document.getElementById("result");
+const loader=document.getElementById("loader");
+
+function showResult(obj){
+
+resultDiv.style.display="block";
+
+resultDiv.className="result "+(
+obj.is_disposable || obj.valid===false
+? "bad"
+: "good"
+);
+
+resultDiv.innerHTML=
+obj.valid===false || obj.is_disposable
+
+? `❌ <strong>Blocked:</strong> ${obj.reason || "Disposable or invalid"}
+<div class="small">${obj.email}</div>`
+
+: `✅ <strong>Allowed:</strong> ${obj.reason || "Valid"}
+<div class="small">${obj.email}</div>`;
+}
+
+async function checkEmail(){
+
+const email=emailInput.value.trim();
+
+if(!email){
+
+resultDiv.style.display="block";
+resultDiv.className="result bad";
+resultDiv.innerText="Please type an email.";
+
+return;
+}
+
+loader.style.display="block";
+resultDiv.style.display="none";
+
+try{
+
+const res=await fetch(WORKER_URL,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+email,
+api_key:"demo_key_123"
+})
+});
+
+const data=await res.json();
+
+showResult(data);
+
+}catch{
+
+resultDiv.style.display="block";
+resultDiv.className="result bad";
+resultDiv.innerText="⚠️ Server unreachable. Try again later.";
+
+}finally{
+
+loader.style.display="none";
+
+}
+
+}
+
+btn.addEventListener("click",checkEmail);
+
+emailInput.addEventListener("keypress",(e)=>{
+if(e.key==="Enter") checkEmail();
+});
+</script></body>
 </html>
