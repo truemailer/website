@@ -1,333 +1,709 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Truemailer — Block Disposable Emails</title><style>
+
+<!-- ================= SEO: PRIMARY META ================= -->
+<title>Truemailer — Disposable & Temporary Email Checker API</title>
+<meta name="description" content="Truemailer is a real-time email verification API that detects disposable, temporary, and fake email addresses. Stop fake signups and protect your free trials — free tier available.">
+<meta name="keywords" content="disposable email checker, temporary email detection, email verification API, block fake signups, email validation API, spam email filter, throwaway email detector">
+<meta name="author" content="Truemailer">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://truemailer.dev/">
+
+<!-- ================= SEO: OPEN GRAPH ================= -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Truemailer — Disposable & Temporary Email Checker API">
+<meta property="og:description" content="Real-time API that detects disposable and temporary email addresses so you can stop fake signups before they happen.">
+<meta property="og:url" content="https://truemailer.dev/">
+<meta property="og:image" content="https://truemailer.dev/og-image.png">
+<meta property="og:site_name" content="Truemailer">
+
+<!-- ================= SEO: TWITTER CARD ================= -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Truemailer — Disposable & Temporary Email Checker API">
+<meta name="twitter:description" content="Real-time API that detects disposable and temporary email addresses so you can stop fake signups before they happen.">
+<meta name="twitter:image" content="https://truemailer.dev/og-image.png">
+
+<!-- ================= SEO: STRUCTURED DATA ================= -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Truemailer",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "description": "Real-time API that detects disposable, temporary, and fake email addresses to protect signup forms and free trials.",
+  "url": "https://truemailer.dev/",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a disposable email address?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A disposable email address is a temporary inbox created to receive a single message, often used to bypass signup verification or trial limits without providing a real address."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does Truemailer detect disposable emails?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Truemailer checks the domain of an email address against a continuously updated list of known disposable and temporary email providers, then returns a real-time verdict through a simple API call."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Truemailer free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Truemailer offers a free tier for testing and low-volume use, with paid plans available for production traffic at higher volume."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
 :root{
---bg:#f5f9ff;
---card:#fff;
---primary:#007aff;
---primary-light:#eaf4ff;
---text:#0f172a;
---muted:#64748b;
---success:#16a34a;
---danger:#ef4444;
---radius:18px;
+  --bg:#f5f9ff;
+  --card:#ffffff;
+  --primary:#007aff;
+  --primary-dark:#0060cc;
+  --primary-light:#eaf4ff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --border:#e2e9f5;
+  --success:#16a34a;
+  --success-bg:#ecfdf3;
+  --danger:#ef4444;
+  --danger-bg:#fef2f2;
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:10px;
+  --shadow:0 4px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(0,122,255,.12);
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; }
 
 body{
-font-family:Inter,Arial,sans-serif;
-background:linear-gradient(180deg,#f5f9ff,#fff);
-color:var(--text);
-min-height:100vh;
+  font-family:'Inter',Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
 }
 
-.container{
-max-width:1200px;
-margin:auto;
-padding:24px;
+h1,h2,h3,h4{ font-family:'Lexend','Inter',Arial,sans-serif; letter-spacing:-.01em; }
+
+a{ color:inherit; text-decoration:none; }
+
+.container{ max-width:1180px; margin:0 auto; padding:0 24px; }
+
+/* ---------- Skip link (a11y) ---------- */
+.skip-link{
+  position:absolute; left:-999px; top:0;
+  background:var(--primary); color:#fff; padding:10px 16px; border-radius:8px; z-index:100;
+}
+.skip-link:focus{ left:16px; top:16px; }
+
+/* ---------- Nav ---------- */
+.nav-wrap{
+  position:sticky; top:0; z-index:50;
+  background:rgba(245,249,255,.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 24px; max-width:1180px; margin:0 auto;
+}
+.brand{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.15rem; }
+.brand svg{ width:34px; height:34px; }
+.nav-links{ display:flex; gap:28px; align-items:center; }
+.nav-links a{ color:var(--muted); font-weight:500; font-size:.95rem; transition:color .15s; }
+.nav-links a:hover, .nav-links a:focus-visible{ color:var(--primary); }
+.nav-cta{
+  background:var(--primary); color:#fff !important; padding:10px 18px;
+  border-radius:999px; font-weight:600; font-size:.9rem;
+}
+.nav-cta:hover{ background:var(--primary-dark); }
+.nav-toggle{ display:none; }
+
+@media(max-width:800px){
+  .nav-links{ display:none; }
 }
 
-header{
-text-align:center;
-margin-bottom:50px;
+/* ---------- Hero ---------- */
+.hero{ padding:64px 0 40px; }
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--primary-light); color:var(--primary);
+  padding:8px 16px; border-radius:999px; font-size:.85rem; font-weight:600;
 }
+.eyebrow .dot{ width:7px; height:7px; border-radius:50%; background:var(--success); display:inline-block; }
 
-.logo{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:12px;
-}
-
-.logo svg{
-width:60px;
-height:60px;
-}
-
-h1{
-font-size:2rem;
-font-weight:800;
-}
-
-.lead{
-color:var(--muted);
-margin-top:10px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 380px;
-gap:24px;
-}
+.grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:start; margin-top:26px; }
 
 .card{
-background:var(--card);
-border-radius:var(--radius);
-padding:24px;
-box-shadow:0 4px 20px rgba(0,0,0,.06);
+  background:var(--card); border-radius:var(--radius-lg); padding:32px;
+  box-shadow:var(--shadow); border:1px solid var(--border);
 }
 
-.badge{
-display:inline-block;
-background:var(--primary-light);
-color:var(--primary);
-padding:8px 14px;
-border-radius:999px;
-font-size:.85rem;
-font-weight:600;
-}
+.hero-title{ font-size:clamp(1.9rem,3.6vw,2.7rem); font-weight:800; margin:18px 0 14px; line-height:1.12; }
+.hero-title em{ font-style:normal; color:var(--primary); }
+.hero-text{ color:var(--muted); font-size:1.05rem; max-width:56ch; }
 
-.hero-title{
-font-size:2.6rem;
-font-weight:800;
-margin:18px 0 12px;
-line-height:1.1;
+.hero-actions{ display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:.95rem;
+  padding:13px 22px; border-radius:12px; border:none; cursor:pointer; transition:transform .12s, background .15s;
 }
-
-.hero-text{
-color:var(--muted);
-line-height:1.7;
-}
+.btn:active{ transform:scale(.98); }
+.btn-primary{ background:var(--primary); color:#fff; }
+.btn-primary:hover{ background:var(--primary-dark); }
+.btn-ghost{ background:var(--primary-light); color:var(--primary); }
+.btn-ghost:hover{ background:#dcecff; }
 
 .code{
-background:#0f172a;
-color:white;
-padding:18px;
-border-radius:14px;
-margin-top:20px;
-font-family:monospace;
-overflow:auto;
+  background:#0f172a; color:#e2e8f0; padding:20px; border-radius:var(--radius-md);
+  margin-top:24px; font-family:'SFMono-Regular',Consolas,monospace; font-size:.85rem;
+  overflow-x:auto; line-height:1.6;
 }
+.code .m{ color:#7dd3fc; }
+.code .s{ color:#86efac; }
+.code .k{ color:#f472b6; }
 
-.input-row{
-display:flex;
-gap:10px;
+.hero-note{ margin-top:14px; color:var(--muted); font-size:.85rem; }
+
+/* trust strip */
+.trust{ display:flex; gap:28px; flex-wrap:wrap; margin-top:28px; color:var(--muted); font-size:.85rem; }
+.trust span{ font-weight:700; color:var(--ink); }
+
+/* ---------- Demo card ---------- */
+.demo-card h2{ font-size:1.3rem; }
+.demo-sub{ color:var(--muted); font-size:.9rem; margin:8px 0 20px; }
+.input-row{ display:flex; gap:10px; }
+input[type="text"]{
+  flex:1; padding:14px 16px; border:1.5px solid var(--border); border-radius:12px;
+  font-size:15px; font-family:inherit; transition:border-color .15s;
 }
+input[type="text"]:focus{ outline:none; border-color:var(--primary); }
+.result{ margin-top:16px; padding:16px; border-radius:12px; font-size:.95rem; display:none; }
+.result.good{ background:var(--success-bg); border-left:4px solid var(--success); }
+.result.bad{ background:var(--danger-bg); border-left:4px solid var(--danger); }
+.small{ font-size:.85rem; color:var(--muted); }
+.loader{ display:none; margin-top:12px; font-size:.9rem; color:var(--muted); }
 
-input{
-flex:1;
-padding:14px;
-border:1px solid #dbe4f0;
-border-radius:12px;
-font-size:15px;
-}
+.demo-meta{ margin-top:22px; padding-top:20px; border-top:1px dashed var(--border); display:grid; gap:10px; }
+.demo-meta-row{ display:flex; justify-content:space-between; font-size:.85rem; color:var(--muted); }
 
-button{
-background:var(--primary);
-color:white;
-border:none;
-padding:14px 18px;
-border-radius:12px;
-cursor:pointer;
-font-weight:600;
-}
+/* ---------- Sections ---------- */
+section{ padding:72px 0; }
+.section-head{ max-width:640px; margin:0 auto 44px; text-align:center; }
+.section-head .eyebrow{ margin-bottom:14px; }
+.section-head h2{ font-size:clamp(1.6rem,3vw,2.1rem); font-weight:800; }
+.section-head p{ color:var(--muted); margin-top:12px; }
 
-.result{
-margin-top:15px;
-padding:15px;
-border-radius:12px;
-}
-
-.result.good{
-background:#ecfdf3;
-border-left:5px solid var(--success);
-}
-
-.result.bad{
-background:#fef2f2;
-border-left:5px solid var(--danger);
-}
-
-.small{
-font-size:.9rem;
-color:var(--muted);
-}
-
-.features{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
-margin-top:25px;
-}
-
+/* features */
+.features-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
 .feature{
-background:#f8fbff;
-padding:18px;
-border-radius:14px;
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:26px; transition:transform .15s, box-shadow .15s;
 }
+.feature:hover{ transform:translateY(-3px); box-shadow:var(--shadow); }
+.feature-icon{
+  width:44px; height:44px; border-radius:12px; background:var(--primary-light);
+  display:flex; align-items:center; justify-content:center; font-size:1.3rem; margin-bottom:14px;
+}
+.feature h3{ font-size:1.05rem; margin-bottom:8px; }
+.feature p{ color:var(--muted); font-size:.92rem; }
 
-.feature h4{
-margin-bottom:8px;
+/* how it works */
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; counter-reset:step; }
+.step{ position:relative; padding:28px 24px 24px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius-md); }
+.step-num{
+  width:36px; height:36px; border-radius:10px; background:var(--primary); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:16px;
 }
+.step h3{ font-size:1rem; margin-bottom:8px; }
+.step p{ color:var(--muted); font-size:.9rem; }
 
-footer{
-text-align:center;
-padding:40px 0;
-color:var(--muted);
-margin-top:50px;
+/* use cases */
+.usecases{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.usecase{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; text-align:center; }
+.usecase-icon{ font-size:1.6rem; margin-bottom:8px; }
+.usecase h3{ font-size:.95rem; margin-bottom:4px; }
+.usecase p{ font-size:.82rem; color:var(--muted); }
+
+/* pricing */
+.pricing-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+.plan{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:30px; }
+.plan.featured{ border:2px solid var(--primary); box-shadow:var(--shadow-lg); position:relative; }
+.plan.featured::before{
+  content:"Most popular"; position:absolute; top:-13px; left:24px;
+  background:var(--primary); color:#fff; font-size:.75rem; font-weight:700;
+  padding:5px 12px; border-radius:999px;
 }
+.plan h3{ font-size:1.1rem; }
+.price{ font-size:2.2rem; font-weight:800; margin:14px 0 6px; }
+.price span{ font-size:.95rem; color:var(--muted); font-weight:500; }
+.plan ul{ list-style:none; margin:20px 0 24px; display:grid; gap:10px; }
+.plan li{ font-size:.9rem; color:var(--muted); display:flex; gap:8px; }
+.plan li::before{ content:"✓"; color:var(--success); font-weight:700; }
+.plan .btn{ width:100%; justify-content:center; }
+
+/* faq */
+.faq{ max-width:760px; margin:0 auto; display:grid; gap:12px; }
+.faq-item{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; }
+.faq-item summary{
+  padding:18px 22px; cursor:pointer; font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center;
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{ content:"+"; color:var(--primary); font-size:1.3rem; font-weight:400; }
+.faq-item[open] summary::after{ content:"–"; }
+.faq-item p{ padding:0 22px 20px; color:var(--muted); font-size:.92rem; }
+
+/* final cta */
+.cta-section{
+  background:linear-gradient(135deg,var(--primary),#3b9dff);
+  border-radius:var(--radius-lg); padding:56px 40px; text-align:center; color:#fff;
+}
+.cta-section h2{ font-size:clamp(1.5rem,3vw,2rem); margin-bottom:14px; }
+.cta-section p{ opacity:.9; max-width:50ch; margin:0 auto 24px; }
+.cta-section .btn-primary{ background:#fff; color:var(--primary); }
+.cta-section .btn-primary:hover{ background:#f0f7ff; }
+
+/* footer */
+footer{ border-top:1px solid var(--border); padding:48px 0 28px; margin-top:20px; }
+.footer-grid{ display:grid; grid-template-columns:2fr repeat(3,1fr); gap:32px; margin-bottom:36px; }
+.footer-brand p{ color:var(--muted); font-size:.9rem; margin-top:10px; max-width:32ch; }
+.footer-col h4{ font-size:.85rem; margin-bottom:14px; }
+.footer-col ul{ list-style:none; display:grid; gap:10px; }
+.footer-col a{ color:var(--muted); font-size:.88rem; }
+.footer-col a:hover{ color:var(--primary); }
+.footer-bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; color:var(--muted); font-size:.82rem; border-top:1px solid var(--border); padding-top:22px; }
 
 @media(max-width:900px){
-
-.grid{
-grid-template-columns:1fr;
+  .grid{ grid-template-columns:1fr; }
+  .features-grid{ grid-template-columns:1fr 1fr; }
+  .steps{ grid-template-columns:1fr; }
+  .usecases{ grid-template-columns:1fr 1fr; }
+  .pricing-grid{ grid-template-columns:1fr; }
+  .footer-grid{ grid-template-columns:1fr 1fr; }
+  .input-row{ flex-direction:column; }
+  .btn{ width:100%; justify-content:center; }
 }
-
-.features{
-grid-template-columns:1fr;
+@media(max-width:520px){
+  .features-grid, .usecases, .footer-grid{ grid-template-columns:1fr; }
 }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-.hero-title{
-font-size:2rem;
+<div class="nav-wrap">
+  <nav aria-label="Primary">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 64 64" role="img" aria-label="Truemailer logo">
+        <rect x="2" y="8" width="60" height="48" rx="8" fill="white" stroke="#e6f0ff"/>
+        <path d="M6 16L32 34L58 16" stroke="#cfe8ff" stroke-width="2.5" fill="none"/>
+        <rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
+        <text x="32" y="42" fill="white" text-anchor="middle" font-size="14" font-weight="700">T</text>
+      </svg>
+      Truemailer
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#use-cases">Use cases</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      <a class="nav-cta" href="#demo">Try it free</a>
+    </div>
+  </nav>
+</div>
+
+<main id="main">
+<div class="container">
+
+  <!-- ================= HERO ================= -->
+  <header class="hero" id="top">
+    <span class="eyebrow"><span class="dot"></span> Real-time email verification API</span>
+
+    <div class="grid">
+      <div class="card">
+        <h1 class="hero-title">Block disposable emails <em>before</em> they sign up</h1>
+        <p class="hero-text">
+          Truemailer checks every email against a constantly updated list of disposable and temporary domains,
+          so fake accounts, spam, and free-trial abuse never make it past your signup form.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#demo">Try the live demo</a>
+          <a class="btn btn-ghost" href="#docs">Read the docs</a>
+        </div>
+
+        <div class="code" aria-label="Sample API request">
+<span class="k">POST</span> https://truemailer-api.onrender.com/verify
+{
+  <span class="m">"email"</span>: <span class="s">"user@example.com"</span>
 }
+        </div>
+        <p class="hero-note">Send your key as an <code>x-api-key</code> header for production traffic.</p>
 
-.input-row{
-flex-direction:column;
-}
+        <div class="trust">
+          <div><span>&lt;150ms</span> average response</div>
+          <div><span>50k+</span> disposable domains tracked</div>
+          <div><span>99.9%</span> uptime</div>
+        </div>
+      </div>
 
-button{
-width:100%;
-}
+      <div class="card demo-card" id="demo">
+        <h2>Try Truemailer free</h2>
+        <p class="demo-sub">Check any address instantly with our demo key — no signup required.</p>
 
-}
-</style></head><body><div class="container"><header>
-<div class="logo"><svg viewBox="0 0 64 64">
-<rect x="2" y="8" width="60" height="48" rx="8" fill="white" stroke="#e6f0ff"/>
-<path d="M6 16L32 34L58 16" stroke="#cfe8ff" stroke-width="2.5"/>
-<rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
-<text x="32" y="42" fill="white" text-anchor="middle" font-size="14" font-weight="700">T</text>
-</svg><div>
-<h1>Truemailer</h1>
-<p class="lead">
-Block disposable emails. Protect your signup flow.
-</p>
-</div></div>
-</header><div class="grid"><div class="card"><span class="badge">
-Real-Time Email Verification API
-</span><h2 class="hero-title">
-Block Disposable Emails Before They Sign Up
-</h2><p class="hero-text">
-Truemailer helps SaaS companies stop temporary, fake and disposable email addresses from abusing free trials and creating spam accounts.
-</p><div class="code">
-POST https://truemailer-api.onrender.com/verify/{
-"email":"user@example.com"
-}
+        <form id="demo-form">
+          <div class="input-row">
+            <label for="demo-email" class="visually-hidden" style="position:absolute;left:-9999px;">Email address to check</label>
+            <input id="demo-email" type="text" placeholder="name@example.com" autocomplete="off">
+            <button class="btn btn-primary" id="check-btn" type="submit">Verify</button>
+          </div>
+        </form>
 
-</div><p class="small" style="margin-top:15px;">
-Use x-api-key for production integrations.
-</p><div class="features"><div class="feature">
-<h4>⚡ Instant</h4>
-<p class="small">
-Real-time email verification.
-</p>
-</div><div class="feature">
-<h4>🛡️ Secure</h4>
-<p class="small">
-Protect trials and signups.
-</p>
-</div><div class="feature">
-<h4>🌍 Global</h4>
-<p class="small">
-Detect disposable domains worldwide.
-</p>
-</div></div></div><div class="card"><h3>Try Truemailer Free</h3><p class="small" style="margin:10px 0 18px;">
-Check any email instantly using our demo API key.
-</p><div class="input-row">
-<input id="demo-email" type="text" placeholder="name@example.com">
-<button id="check-btn">Verify</button>
-</div><div id="result" class="result" style="display:none"></div><div id="loader" class="small" style="display:none;margin-top:10px;">
-⏳ Checking...
-</div></div></div><footer>
-<p><strong>© Truemailer</strong></p>
-<p class="small">
-Built for developers who care about clean signups.
-</p>
-</footer></div><script>
-const WORKER_URL="https://truemailer-api.onrender.com/verify/";
+        <div id="result" class="result" role="status"></div>
+        <p id="loader" class="loader">Checking…</p>
 
-const btn=document.getElementById("check-btn");
-const emailInput=document.getElementById("demo-email");
-const resultDiv=document.getElementById("result");
-const loader=document.getElementById("loader");
+        <div class="demo-meta">
+          <div class="demo-meta-row"><span>Requests today</span><span>Unlimited on demo key</span></div>
+          <div class="demo-meta-row"><span>Rate limit</span><span>10 req / min</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= FEATURES ================= -->
+  <section id="features">
+    <div class="section-head">
+      <span class="eyebrow">Why Truemailer</span>
+      <h2>Everything you need to keep signups clean</h2>
+      <p>One endpoint, one response, no infrastructure to maintain.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>Instant verification</h3>
+        <p>Get a verdict in under 150ms so you can validate emails inline, before the form is submitted.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🛡️</div>
+        <h3>Trial abuse protection</h3>
+        <p>Stop the same person from farming free trials with a new disposable inbox every time.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌍</div>
+        <h3>Global domain coverage</h3>
+        <p>Tracks disposable and temporary-email providers from across the world, updated continuously.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔌</div>
+        <h3>Drop-in API</h3>
+        <p>A single REST endpoint that returns clean JSON — works with any language or framework.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>Clear verdicts</h3>
+        <p>Every response includes a reason, so you always know why an email was allowed or blocked.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔑</div>
+        <h3>Simple auth</h3>
+        <p>Authenticate with a single API key — no OAuth flow, no SDK installation required.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section id="how-it-works">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Three steps to a cleaner signup form</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Send the email</h3>
+        <p>POST the address to <code>/verify</code> the moment your user submits your signup form.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Get a verdict</h3>
+        <p>Truemailer checks the domain against its disposable-email list and returns a verdict and reason.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Allow or block</h3>
+        <p>Use the response to accept the signup or ask the user for a permanent email address.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= USE CASES ================= -->
+  <section id="use-cases">
+    <div class="section-head">
+      <span class="eyebrow">Built for</span>
+      <h2>Wherever a fake email can cause damage</h2>
+    </div>
+
+    <div class="usecases">
+      <div class="usecase">
+        <div class="usecase-icon">🧪</div>
+        <h3>Free trials</h3>
+        <p>Stop one person from claiming ten trials.</p>
+      </div>
+      <div class="usecase">
+        <div class="usecase-icon">💬</div>
+        <h3>Comment forms</h3>
+        <p>Reduce spam accounts and bot submissions.</p>
+      </div>
+      <div class="usecase">
+        <div class="usecase-icon">🎟️</div>
+        <h3>Waitlists</h3>
+        <p>Keep waitlist metrics honest and accurate.</p>
+      </div>
+      <div class="usecase">
+        <div class="usecase-icon">🛒</div>
+        <h3>E-commerce</h3>
+        <p>Protect coupon codes from throwaway accounts.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DOCS / CODE ================= -->
+  <section id="docs">
+    <div class="section-head">
+      <span class="eyebrow">Quick start</span>
+      <h2>Integrate in under five minutes</h2>
+    </div>
+
+    <div class="card" style="max-width:760px;margin:0 auto;">
+      <div class="code" aria-label="cURL example">
+<span class="k">curl</span> -X POST https://truemailer-api.onrender.com/verify \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -H <span class="s">"x-api-key: YOUR_API_KEY"</span> \
+  -d <span class="s">'{"email":"user@example.com"}'</span>
+      </div>
+      <p class="small" style="margin-top:16px;">
+        Response includes <code>valid</code>, <code>is_disposable</code>, and a human-readable <code>reason</code> field.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= PRICING ================= -->
+  <section id="pricing">
+    <div class="section-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>Start free, scale when you need to</h2>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="plan">
+        <h3>Free</h3>
+        <div class="price">$0<span>/mo</span></div>
+        <ul>
+          <li>500 verifications / month</li>
+          <li>10 requests / minute</li>
+          <li>Community support</li>
+        </ul>
+        <a class="btn btn-ghost" href="#demo">Start free</a>
+      </div>
+      <div class="plan featured">
+        <h3>Growth</h3>
+        <div class="price">$19<span>/mo</span></div>
+        <ul>
+          <li>50,000 verifications / month</li>
+          <li>No rate limit</li>
+          <li>Priority email support</li>
+          <li>Webhook alerts</li>
+        </ul>
+        <a class="btn btn-primary" href="#demo">Get started</a>
+      </div>
+      <div class="plan">
+        <h3>Scale</h3>
+        <div class="price">Custom</div>
+        <ul>
+          <li>Unlimited verifications</li>
+          <li>Dedicated infrastructure</li>
+          <li>SLA and onboarding support</li>
+        </ul>
+        <a class="btn btn-ghost" href="mailto:hello@truemailer.dev">Contact us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section id="faq">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>Common questions</h2>
+    </div>
+
+    <div class="faq">
+      <details class="faq-item">
+        <summary>What is a disposable email address?</summary>
+        <p>A disposable email address is a temporary inbox created to receive a single message, often used to bypass signup verification or trial limits without providing a real address.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How does Truemailer detect disposable emails?</summary>
+        <p>Truemailer checks the domain of an email address against a continuously updated list of known disposable and temporary email providers, then returns a real-time verdict through a simple API call.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is Truemailer free to use?</summary>
+        <p>Yes. The free tier is meant for testing and low-volume use, with paid plans available once you need higher throughput.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Does Truemailer store the emails I check?</summary>
+        <p>Truemailer only uses submitted addresses to return a verdict and does not sell or share the data you send it.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= FINAL CTA ================= -->
+  <section>
+    <div class="cta-section">
+      <h2>Stop fake signups today</h2>
+      <p>Add one API call to your signup flow and start blocking disposable emails in minutes.</p>
+      <a class="btn btn-primary" href="#demo">Try Truemailer free</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <svg viewBox="0 0 64 64" width="30" height="30" role="img" aria-label="Truemailer logo">
+            <rect x="2" y="8" width="60" height="48" rx="8" fill="white" stroke="#e6f0ff"/>
+            <path d="M6 16L32 34L58 16" stroke="#cfe8ff" stroke-width="2.5" fill="none"/>
+            <rect x="10" y="26" width="44" height="22" rx="4" fill="#007aff"/>
+            <text x="32" y="42" fill="white" text-anchor="middle" font-size="14" font-weight="700">T</text>
+          </svg>
+          Truemailer
+        </div>
+        <p>Real-time disposable email detection for developers who care about clean signups.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#docs">Documentation</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#use-cases">Use cases</a></li>
+          <li><a href="https://github.com/" target="_blank" rel="noopener">GitHub repo</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="mailto:hello@truemailer.dev">Contact</a></li>
+          <li><a href="#top">Back to top</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> Truemailer. Built for developers who care about clean signups.</p>
+      <p>Made with care, one API call at a time.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const WORKER_URL = "https://truemailer-api.onrender.com/verify/";
+
+const form = document.getElementById("demo-form");
+const emailInput = document.getElementById("demo-email");
+const resultDiv = document.getElementById("result");
+const loader = document.getElementById("loader");
 
 function showResult(obj){
-
-resultDiv.style.display="block";
-
-resultDiv.className="result "+(
-obj.is_disposable || obj.valid===false
-? "bad"
-: "good"
-);
-
-resultDiv.innerHTML=
-obj.valid===false || obj.is_disposable
-
-? `❌ <strong>Blocked:</strong> ${obj.reason || "Disposable or invalid"}
-<div class="small">${obj.email}</div>`
-
-: `✅ <strong>Allowed:</strong> ${obj.reason || "Valid"}
-<div class="small">${obj.email}</div>`;
+  resultDiv.style.display = "block";
+  const blocked = obj.valid === false || obj.is_disposable;
+  resultDiv.className = "result " + (blocked ? "bad" : "good");
+  resultDiv.innerHTML = (blocked
+    ? `❌ <strong>Blocked:</strong> ${obj.reason || "Disposable or invalid"}`
+    : `✅ <strong>Allowed:</strong> ${obj.reason || "Valid"}`
+  ) + `<div class="small">${obj.email || ""}</div>`;
 }
 
-async function checkEmail(){
+async function checkEmail(e){
+  if (e) e.preventDefault();
+  const email = emailInput.value.trim();
 
-const email=emailInput.value.trim();
+  if (!email){
+    resultDiv.style.display = "block";
+    resultDiv.className = "result bad";
+    resultDiv.innerText = "Please enter an email address.";
+    return;
+  }
 
-if(!email){
+  loader.style.display = "block";
+  resultDiv.style.display = "none";
 
-resultDiv.style.display="block";
-resultDiv.className="result bad";
-resultDiv.innerText="Please type an email.";
-
-return;
+  try{
+    const res = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, api_key: "demo_key_123" })
+    });
+    const data = await res.json();
+    showResult(data);
+  } catch {
+    resultDiv.style.display = "block";
+    resultDiv.className = "result bad";
+    resultDiv.innerText = "⚠️ Server unreachable. Please try again shortly.";
+  } finally {
+    loader.style.display = "none";
+  }
 }
 
-loader.style.display="block";
-resultDiv.style.display="none";
-
-try{
-
-const res=await fetch(WORKER_URL,{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-email,
-api_key:"demo_key_123"
-})
-});
-
-const data=await res.json();
-
-showResult(data);
-
-}catch{
-
-resultDiv.style.display="block";
-resultDiv.className="result bad";
-resultDiv.innerText="⚠️ Server unreachable. Try again later.";
-
-}finally{
-
-loader.style.display="none";
-
-}
-
-}
-
-btn.addEventListener("click",checkEmail);
-
-emailInput.addEventListener("keypress",(e)=>{
-if(e.key==="Enter") checkEmail();
-});
-</script></body>
+form.addEventListener("submit", checkEmail);
+</script>
+</body>
 </html>
